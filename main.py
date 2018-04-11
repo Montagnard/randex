@@ -1,28 +1,38 @@
+#!/usr/bin/env python
 import numpy.random as rand
 import numpy
 import math
 from pylatex import Document, Section, Subsection, Tabular, Math, TikZ, Axis, \
-    Plot, Figure, Matrix, NoEscape
+    Plot, Figure, Matrix, NoEscape, Command
 from pylatex.utils import italic
 import os
-from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
-latex_jinja_env = Environment(
-	block_start_string = '\BLOCK{',
-	block_end_string = '}',
-	variable_start_string = '\VAR{',
-	variable_end_string = '}',
-	comment_start_string = '\#{',
-	comment_end_string = '}',
-	line_statement_prefix = '%%',
-	line_comment_prefix = '%#',
-	trim_blocks = True,
-	autoescape = False,
-	loader = FileSystemLoader(os.path.abspath('.'))
-)
-template = latex_jinja_env.get_template('jinja-test.tex')
-n = 3
+# from jinja2 import Template, Environment, FileSystemLoader
+# latex_jinja_env = Environment(
+# 	block_start_string = '\BLOCK{',
+# 	block_end_string = '}',
+# 	variable_start_string = '\VAR{',
+# 	variable_end_string = '}',
+# 	comment_start_string = '\#{',
+# 	comment_end_string = '}',
+# 	line_statement_prefix = '%%',
+# 	line_comment_prefix = '%#',
+# 	trim_blocks = True,
+# 	autoescape = False,
+# 	loader = FileSystemLoader(os.path.abspath('.'))
+# )
+# template = latex_jinja_env.get_template('jinja-test.tex')
+
+Trigo = [1]*3 + [2]* 2 + [3]*1
+Diago = [1]
+
+# Parametres :
+shape = Trigo
+n = 4
+
+
 def rand_glZ (n):
-    a = rand.exponential(2, n*n).astype(numpy.int64)
+    a= rand.choice([0]*5 +[1]*3 + [-1]*3 +[2]*2, n*n)
+    #a = rand.exponential(3.5/n, n*n).astype(numpy.int64)
     aa = numpy.array(a)
     U = a.reshape(n,n)
     L = aa.reshape(n,n)
@@ -36,29 +46,18 @@ def rand_glZ (n):
     P = numpy.dot(L,U)
     return P
 
-P = rand_glZ(n)
-Pi = numpy.linalg.inv(P)
-Pi = Pi.astype(numpy.int64)
-print"matrice passage"
-print(P)
-print"inverse"
-print(Pi)
-
-Trigo = [1]*3 + [2]* 2 + [3]*1
-Diago = [1]
 
 def rand_conf_diag(n):
     r = 0
     l = []
     while r < n :
-        k = min(rand.choice(Diago), n-r)
+        k = min(rand.choice(shape), n-r)
         d = rand.choice([1]*10 + [2]*5 + [3]*4 + [4]*3 + [5] + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
         l.append([k,d])
         r = r+k
     return l
 
-l =[[3,2]]
-print l
+
 def diag_from_conf(l, n):
     D = numpy.zeros((n,n), dtype=numpy.int64)
     r=0
@@ -71,13 +70,6 @@ def diag_from_conf(l, n):
         D[r-1, r-1] = duo[1]
     return D
 
-D = diag_from_conf(l, n)
-
-M = numpy.dot(P, numpy.dot(D, Pi))
-print"diagonale"
-print(D)
-print"matrice"
-print(M)
 def matrice_to_string(M):
     s = "\[ \\begin{pmatrix}"
     for ligne in M[:-1]:
@@ -91,20 +83,42 @@ def matrice_to_string(M):
     s = s + "\\end{pmatrix} \]"
     return s
 
-print(matrice_to_string(M))
-Pol = numpy.poly(M)
-print(Pol)
-Pol = (numpy.around(Pol)).astype(numpy.int64)
-print(Pol)
-print((Matrix(M)))
-
-print(Math(data=[Matrix(M)]))
-print(template.render(matrice=matrice_to_string(M), section2='Short Form'))
 geometry_options = {"tmargin": "1cm", "lmargin": "1cm"}
-# doc = Document(geometry_options=geometry_options)
-# doc.append('Etudier la diagonalisabilite de la matrice suivante et donner ses projecteurs spectraux \n')
-# doc.append(Math(data=[Matrix(M)]))
-# doc.generate_pdf('exo', clean_tex=False)
+doc = Document(geometry_options=geometry_options,  escape=False)
+doc.append('Etudier la diagonalisabilite de la matrice suivante et donner une ecriture sous la forme')
+for x in range(10):
+    l = rand_conf_diag(n)
+    #l =[[3,2]]
+    #print l
+    P = rand_glZ(n)
+    Pi = numpy.linalg.inv(P)
+    Pi = (Pi.round()).astype(numpy.int64)
+    # print"matrice passage"
+    # print(P)
+    # print"inverse"
+    # print(Pi)
+    D = diag_from_conf(l, n)
+    # print"diagonale"
+    # print(D)
+    M = numpy.dot(P, numpy.dot(D, Pi))
+    # print"matrice"
+    # print(M)
+    # print(matrice_to_string(M))
+    # Pol = numpy.poly(M)
+    # print(Pol)
+    # Pol = (numpy.around(Pol)).astype(numpy.int64)
+    # print(Pol)
+    # print((Matrix(M)))
+    # print(Math(data=[Matrix(M)]))
+    # print(template.render(matrice=matrice_to_string(M), section2='Short Form'))
+    math= Math(data = ["P", Command("cdot D "), Command("cdot P^{-1}")])
+    doc.append(math)
+    doc.append(Math(data=["M = ", Matrix(M)]))
+    # doc.append(Command("newpage"))
+    doc.append("Corrige :")
+    math = Math(data = ["M =", Matrix(P), Command("cdot"), Matrix(D), Command("cdot"), Matrix(Pi)] )
+    doc.append(math)
+doc.generate_pdf('exo', clean_tex=False)
 
 
 
