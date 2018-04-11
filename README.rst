@@ -7,6 +7,7 @@ Développements futurs :
 - matrice avec valeurs bornées
 
 - exercices plus variés :
+
   * Montrer que x est un vecteur propre
   * Calculer le polynôme caractéristique
   * Calculer rg(M) (rg(M-a id)) en déduire l'ensemble des valeurs propres
