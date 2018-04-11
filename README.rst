@@ -6,6 +6,8 @@ Développements futurs :
 
 - matrice avec valeurs propres bornées
 
+- Jinja2 templates, version en anglais
+
 - exercices plus variés :
 
   * Montrer que x est un vecteur propre
