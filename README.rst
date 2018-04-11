@@ -1,10 +1,10 @@
-Un générateur automatique d'exercices sur la diagonalisation ou sur la mise sous forme de Jordan de matrices explicites
+Un générateur automatique d'exercices sur la diagonalisation ou sur la mise sous forme de Jordan de matrices explicites.
 
 Développements futurs :
 
 - ordonnancement des valeurs propres
 
-- matrice avec valeurs bornées
+- matrice avec valeurs propres bornées
 
 - exercices plus variés :
 
