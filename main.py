@@ -21,29 +21,14 @@ import os
 # )
 # template = latex_jinja_env.get_template('jinja-test.tex')
 
+
 Trigo = [1]*3 + [2]* 2 + [3]*1
 Diago = [1]
 
 # Parametres :
 shape = Trigo
-n = 4
+n = 3
 
-
-def rand_glZ (n):
-    a= rand.choice([0]*5 +[1]*3 + [-1]*3 +[2]*2, n*n)
-    #a = rand.exponential(3.5/n, n*n).astype(numpy.int64)
-    aa = numpy.array(a)
-    U = a.reshape(n,n)
-    L = aa.reshape(n,n)
-    print(U)
-    for i in range(0, n) :
-        U[i, i] = rand.choice([1, -1])
-        L[i, i] = rand.choice([1, -1])
-        for j in range(0, i) :
-            U[i, j] = 0
-            L[j, i] = 0
-    P = numpy.dot(L,U)
-    return P
 
 
 def rand_conf_diag(n):
@@ -62,7 +47,6 @@ def rand_conf_diag(n):
     l = sorted(l)
     return l
 
-
 def diag_from_conf(l, n):
     D = numpy.zeros((n,n), dtype=numpy.int64)
     r=0
@@ -75,25 +59,80 @@ def diag_from_conf(l, n):
         D[r-1, r-1] = duo[0]
     return D
 
-def matrice_to_string(M):
-    s = "\[ \\begin{pmatrix}"
-    for ligne in M[:-1]:
-        for x in ligne[:-1]:
-            s = s + str(x) + "&"
-        s = s + str(ligne[-1])
-        s = s + "\\\\"
-    for x in M[-1][:-1]:
-        s = s + str(x) + "&"
-        s = s + str(M[-1][-1])
-    s = s + "\\end{pmatrix} \]"
-    return s
+
+def rand_glZ (n):
+    a= rand.choice([0]*5 +[1]*3 + [-1]*3 +[2]*2, n*n)
+    #a = rand.exponential(3.5/n, n*n).astype(numpy.int64)
+    aa = numpy.array(a)
+    U = a.reshape(n,n)
+    L = aa.reshape(n,n)
+    print(U)
+    for i in range(0, n) :
+        U[i, i] = rand.choice([1, -1])
+        L[i, i] = rand.choice([1, -1])
+        for j in range(0, i) :
+            U[i, j] = 0
+            L[j, i] = 0
+    P = numpy.dot(L,U)
+    return P
+
+def inverse_integer_matrix (P) :
+    Pi = numpy.linalg.inv(P)
+    Pi_integer = (Pi.round()).astype(numpy.int64)
+    return Pi_integer
+
+def latex_matrix (M):
+    s = Matrix(M).dumps_content()
+    return "\\begin{pmatrix} " + s + "\\end{pmatrix}"
+
+
+class Jordan_form :
+
+    def __init__(self, n) :
+        self.block = rand_conf_diag(n)
+        self.jordan = diag_from_conf(self.block, n)
+        self.passage = rand_glZ(n)
+        self.inverse = inverse_integer_matrix(self.passage)
+        self.matrix = numpy.dot(self.passage, numpy.dot(self.jordan, self.inverse))
+
+    def latex_matrix(self) :
+        s = latex_matrix(self.matrix)
+        return s
+
+    def latex_reduced_matrix(self) :
+        sp = latex_matrix(self.passage)
+        sj = latex_matrix(self.jordan)
+        spi = latex_matrix(self.inverse)
+        s = sp + " \cdot " + sj + " \cdot " + spi
+        return s
+
+
+
 
 geometry_options = {"tmargin": "1cm", "lmargin": "1cm"}
 doc = Document(geometry_options=geometry_options,  escape=False)
 doc.append('Etudier la diagonalisabilite de la matrice suivante et donner une ecriture sous la forme')
 math= Math(data = ["P", Command("cdot D "), Command("cdot P^{-1}")])
 doc.append(math)
-for x in range(10):
+letter = list('ABC')
+for x in letter:
+    if x == 'A' :
+        l = [[0,3]]
+    if x == 'B' :
+        l = [[0,2],[0,1]]
+    if x == 'C' :
+        l = [[0,3]]
+    P = rand_glZ(n)
+    Pi = numpy.linalg.inv(P)
+    Pi = (Pi.round()).astype(numpy.int64)
+    D = diag_from_conf(l, n)
+    M = numpy.dot(P, numpy.dot(D, Pi))
+    doc.append(Math(data=[x, " = ", Matrix(M)]))
+    doc.append("Corrige :")
+    math = Math(data = ["M =", Matrix(P), Command("cdot"), Matrix(D), Command("cdot"), Matrix(Pi)] )
+    doc.append(math)
+letter = list('DEFGHJKL')
+for x in letter:
     l = rand_conf_diag(n)
     #l =[[3,2]]
     #print l
@@ -118,7 +157,7 @@ for x in range(10):
     # print((Matrix(M)))
     # print(Math(data=[Matrix(M)]))
     # print(template.render(matrice=matrice_to_string(M), section2='Short Form'))
-    doc.append(Math(data=["M = ", Matrix(M)]))
+    doc.append(Math(data=[x, " = ", Matrix(M)]))
     # doc.append(Command("newpage"))
     doc.append("Corrige :")
     math = Math(data = ["M =", Matrix(P), Command("cdot"), Matrix(D), Command("cdot"), Matrix(Pi)] )
