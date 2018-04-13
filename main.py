@@ -2,8 +2,7 @@
 import numpy.random as rand
 import numpy
 import math
-from pylatex import Document, Section, Subsection, Tabular, Math, TikZ, Axis, \
-    Plot, Figure, Matrix, NoEscape, Command
+from pylatex import Document, Section, Subsection, Tabular, Math, TikZ, Axis, Plot, Figure, Matrix, NoEscape, Command
 from pylatex.utils import italic
 import os
 # from jinja2 import Template, Environment, FileSystemLoader
@@ -50,11 +49,17 @@ def rand_glZ (n):
 def rand_conf_diag(n):
     r = 0
     l = []
+    while r < n-2 :
+        k = min(rand.choice(shape), n-r)
+        d = rand.choice([1]*10 + [2]*5 + [0]*7 + [-1]*6 + [-2]*6)
+        l.append([d,k])
+        r = r+k
     while r < n :
         k = min(rand.choice(shape), n-r)
-        d = rand.choice([1]*10 + [2]*5 + [3]*4 + [4]*3 + [5] + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-        l.append([k,d])
+        d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+        l.append([d,k])
         r = r+k
+    l = sorted(l)
     return l
 
 
@@ -62,12 +67,12 @@ def diag_from_conf(l, n):
     D = numpy.zeros((n,n), dtype=numpy.int64)
     r=0
     for duo in l :
-        k = duo[0]
+        k = duo[1]
         for i in range(r, r+k-1):
-            D[i,i] = duo[1]
+            D[i,i] = duo[0]
             D[i, i+1] = 1
         r = r + k
-        D[r-1, r-1] = duo[1]
+        D[r-1, r-1] = duo[0]
     return D
 
 def matrice_to_string(M):
@@ -86,6 +91,8 @@ def matrice_to_string(M):
 geometry_options = {"tmargin": "1cm", "lmargin": "1cm"}
 doc = Document(geometry_options=geometry_options,  escape=False)
 doc.append('Etudier la diagonalisabilite de la matrice suivante et donner une ecriture sous la forme')
+math= Math(data = ["P", Command("cdot D "), Command("cdot P^{-1}")])
+doc.append(math)
 for x in range(10):
     l = rand_conf_diag(n)
     #l =[[3,2]]
@@ -111,8 +118,6 @@ for x in range(10):
     # print((Matrix(M)))
     # print(Math(data=[Matrix(M)]))
     # print(template.render(matrice=matrice_to_string(M), section2='Short Form'))
-    math= Math(data = ["P", Command("cdot D "), Command("cdot P^{-1}")])
-    doc.append(math)
     doc.append(Math(data=["M = ", Matrix(M)]))
     # doc.append(Command("newpage"))
     doc.append("Corrige :")

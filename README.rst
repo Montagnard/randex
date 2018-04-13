@@ -2,9 +2,7 @@ Un générateur automatique d'exercices sur la diagonalisation ou sur la mise so
 
 Développements futurs :
 
-- ordonnancement des valeurs propres
-
-- matrice avec valeurs propres bornées
+- matrice avec valeurs bornées
 
 - Jinja2 templates, version en anglais
 
