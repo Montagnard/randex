@@ -1,7 +1,7 @@
 
 
 
-RandEx |Travis| |License| |PyPi| |Stable Docs| |Latest Docs|
+RandEx |Installation| |Documentation| |Contributing| |Exemples| |Copyright and License| 
 =============================================================
 
 Un générateur automatique d'exercices sur la diagonalisation ou sur la mise sous forme de Jordan de matrices explicites.
@@ -21,11 +21,11 @@ Contributing
 Toute aide est la bienvenue.
 Des développements futurs sont envisagés. Entre autres:
 
-- Option pour choicir des matrice avec descoefficients bornés
+- Option pour choisir des matrices avec coefficients bornés
 
 - English translation
 
-- exercices plus variés :
+- Exercices plus variés :
 
   * Montrer que x est un vecteur propre
   * Calculer le polynôme caractéristique
@@ -33,7 +33,7 @@ Des développements futurs sont envisagés. Entre autres:
   * Calculer tr(M), en déduire l'ensemble des valeurs propres de M
   * Calculer les projecteurs spectraux
 
-Examples
+Exemples
 --------
 
 .. figure:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
