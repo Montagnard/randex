@@ -9,18 +9,20 @@ import os
 from latex import build_pdf
 from jinja2 import Template, Environment, FileSystemLoader
 latex_jinja_env = Environment(
-	block_start_string = '\BLOCK{',
-	block_end_string = '}',
-	variable_start_string = '\VAR{',
-	variable_end_string = '}',
-	comment_start_string = '\#{',
-	comment_end_string = '}',
-	line_statement_prefix = '%%',
-	line_comment_prefix = '%#',
-	trim_blocks = True,
-	autoescape = False,
-	loader = FileSystemLoader(os.path.abspath('.'))
+    block_start_string = '\BLOCK{',
+    block_end_string = '}',
+    variable_start_string = '\VAR{',
+    variable_end_string = '}',
+    comment_start_string = '\#{',
+    comment_end_string = '}',
+    line_statement_prefix = '%%',
+    line_comment_prefix = '%#',
+    trim_blocks = True,
+    autoescape = False,
+    loader = FileSystemLoader(os.path.abspath('.'))
 )
+
+print(os.path.abspath('.'))
 template = latex_jinja_env.get_template('jinja-test.tex')
 
 
@@ -33,27 +35,27 @@ n = 3
 m=200
 
 def rand_cas32(n):
-	d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	return [[d,1],[d,2]]
+    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    return [[d,1],[d,2]]
 def rand_cas33(n):
-	d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	return [[d,3]]
+    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    return [[d,3]]
 def rand_cas31(n):
-	d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	return [[d,1],[d,1], [d,1]]
+    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    return [[d,1],[d,1], [d,1]]
 def rand_cas21(n):
-	d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	d2 = rand.choice(range(d1+1,10))
-	return [[d1,1],[d1,1],[d2,1]]
+    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    d2 = rand.choice(range(d1+1,10))
+    return [[d1,1],[d1,1],[d2,1]]
 def rand_cas22(n):
-	d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	d2 = rand.choice(range(d1+1,10))
-	return [[d1,2],[d2,1]]
+    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    d2 = rand.choice(range(d1+1,10))
+    return [[d1,2],[d2,1]]
 def rand_cas1(n):
-	d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-	d2 = rand.choice(range(d1+1,10))
-	d3 = rand.choice(range(d2+1, 12))
-	return [[d1,1],[d2,1],[d3,1]]
+    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
+    d2 = rand.choice(range(d1+1,10))
+    d3 = rand.choice(range(d2+1, 12))
+    return [[d1,1],[d2,1],[d3,1]]
 
 def rand_conf_diag(n):
     r = 0
@@ -110,45 +112,45 @@ def latex_matrix (M):
     return "\\begin{pmatrix} " + s + "\\end{pmatrix}"
 
 def roots_to_latex_poly(D) :
-	s = "-"
-	for d,k in D.items() :
-		root = d
-		if root == 0:
-			mon = "\\lambda"
-		elif root > 0 :
-			mon = "(\\lambda -" + str(root) + ")"
-		else :
-			mon = "(\\lambda +" + str(-root) + ")"
-		if k == 1:
-			exp = ""
-		else:
-			exp="^"+str(k)
-		s = s + mon + exp
-	return s
+    s = "-"
+    for d,k in D.items() :
+        root = d
+        if root == 0:
+            mon = "\\lambda"
+        elif root > 0 :
+            mon = "(\\lambda -" + str(root) + ")"
+        else :
+            mon = "(\\lambda +" + str(-root) + ")"
+        if k == 1:
+            exp = ""
+        else:
+            exp="^"+str(k)
+        s = s + mon + exp
+    return s
 
 def pol_to_string (pol, X) :
-	def mon (i):
-		if i == 0:
-			return ""
-		elif i == 1:
-			return X
-		else :
-			return X + "^" + str (i)
-	deg = len(pol)
-	s = ""
-	for i in range(0, deg) :
-		coef = (pol[i].round()).astype(numpy.int64)
-		if coef == 0:
-			s = s
-		elif coef == 1 :
-			s = s + "+" + mon(deg - i)
-		elif coef == -1 :
-			s = s + "-" + mon(deg - i)
-		elif coef > 1 :
-			s = s + "+" + str(coef) + mon(deg - i)
-		else :
-			s = s + str(coef) + mon(deg - i)
-	return s
+    def mon (i):
+        if i == 0:
+            return ""
+        elif i == 1:
+            return X
+        else :
+            return X + "^" + str (i)
+    deg = len(pol)
+    s = ""
+    for i in range(0, deg) :
+        coef = (pol[i].round()).astype(numpy.int64)
+        if coef == 0:
+            s = s
+        elif coef == 1 :
+            s = s + "+" + mon(deg - i)
+        elif coef == -1 :
+            s = s + "-" + mon(deg - i)
+        elif coef > 1 :
+            s = s + "+" + str(coef) + mon(deg - i)
+        else :
+            s = s + str(coef) + mon(deg - i)
+    return s
 
 class Jordan_form :
 
@@ -193,23 +195,23 @@ class Jordan_form :
         i = len(self.blockk)
         j = len(self.block)
         if i == 3:
-            return "cas 1, la matrice a trois valeurs propres distinctes et est diagonalisable"
+            return "la matrice a trois valeurs propres distinctes et est diagonalisable"
         elif i == 2:
             if j ==3:
-                return "cas 2.1, la matrice a deux valeurs propres et est diagonalisable"
+                return "la matrice a deux valeurs propres et est diagonalisable"
             else :
-                return "cas 2.2, la matrice a deux valeurs propre et n'est pas diagonalisable"
+                return "la matrice a deux valeurs propre et n'est pas diagonalisable"
         else :
             if j ==3:
-                return "cas 3.1, la matrice a une seule valeur propre et est diagonalisable"
+                return "la matrice a une seule valeur propre et est diagonalisable"
             if j ==2:
-                return "cas 3.2, la matrice a une seule valeur propre et n'est pas diagonalisable"
+                return "la matrice a une seule valeur propre et n'est pas diagonalisable"
             else :
-                return "cas 3.3, la matrice a une seule valeur propre et n'est pas diagonalisable"
-	def latex_poly(self) :
-		pol = -(numpy.poly(self.spectra))
-		s = pol_to_string(pol, "\\lambda")
-		return s
+                return "la matrice a une seule valeur propre et n'est pas diagonalisable"
+    def latex_poly(self) :
+        pol = -(numpy.poly(self.spectra))
+        s = pol_to_string(pol, "\\lambda")
+        return s
 
 
 
@@ -218,26 +220,29 @@ list_matrix = []
 list_sol = []
 list_poly = []
 for x in range(0,m) :
-	M = Jordan_form(n)
-	list_matrix.append(M.latex_matrix())
-	list_poly.append(pol_to_string(-(M.poly), "\\lambda")+ "=" + roots_to_latex_poly(M.blockkk))
-	s = ""
-	for (d, k) in M.blockk.items() :
-		N = M.matrix-d*numpy.identity(n).astype(int)
-		s = s + "$$M - " + str(d) + "Id =" + latex_matrix(N)
-		s = s + "dim(E_{"+ str(d)+"}) =" + str(k) + "$$"
-	s = s.replace("- -", "+")
-	s = s + "On est donc dans le " + M.cas() +  ". On peut ecrire par exemple la matrice sous la forme :"
-	s = s + "$$"+ M.latex_reduced_form() + "$$"
-	list_sol.append(s)
+    M = Jordan_form(n)
+    list_matrix.append(M.latex_matrix())
+    pol_string = pol_to_string(-(M.poly), "\\lambda")+ "=" + roots_to_latex_poly(M.blockkk)
+    s = "Le polynome caracteristique de la matrice est donne par $$" + pol_string + "$$"
+    for (d, k) in M.blockk.items() :
+        N = M.matrix-d*numpy.identity(n).astype(int)
+        s = s + "$$M - " + str(d) + "Id =" + latex_matrix(N)
+        s = s +"$$ Et on a $"
+        s = s + "dim(E_{"+ str(d)+"}) =" + str(k) + "$."
+    s = s.replace("- -", "+")
+    s = s + "\\ On est donc dans le cas où " + M.cas() +  ". On peut ecrire par exemple la matrice sous la forme :"
+    s = s + "$$"+ M.latex_reduced_form() + "$$"
+    list_sol.append(s)
 
 
 D = {}
 D["list_matrix"] = list_matrix
 D["list_sol"] = list_sol
 D["list_poly"] = list_poly
-template = latex_jinja_env.get_template('template.tex')
 tex = template.render(D)
+f= open("result.tex","w+")
+f.write(tex)
+f.close() 
 pdf = build_pdf(tex)
 pdf.save_to('ex1.pdf')
 

@@ -1,22 +1,58 @@
-\documentclass{article}%
-\usepackage[T1]{fontenc}%
-\usepackage[utf8]{inputenc}%
-\usepackage{lmodern}%
-\usepackage{textcomp}%
-\usepackage{lastpage}%
-\usepackage[tmargin=1cm,lmargin=1cm]{geometry}%
-\usepackage{amsmath}%
+\documentclass[12pt, leqno]{exam}
+\qformat{\textbf{Exercice \thequestion}:\hfill}
+\usepackage[x11names]{xcolor}
+\usepackage{pstricks}
+\usepackage{amsfonts,amsmath,amssymb,mathabx,mathtools, mathrsfs,enumitem,bm,slashed}
+\usepackage{geometry}
+\usepackage{tikz-cd}
+\usetikzlibrary[arrows]
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[autostyle]{csquotes}
+\usepackage{multicol}
+\usepackage[]{hyperref}
+\hypersetup{
+    colorlinks=false,
+}
+
+
+\header{Algèbre linéaire et bilinéaire}{TD }{6 avril 2018}
 
 \begin{document}
-\normalsize%
-Etudier la diagonalisabilite de la matrice suivante et donner ses projecteurs spectraux \newline%
+\def\H{\mathbb{H}}
+\def\P{\mathbf{P}}
+\def\Q{\mathbb{Q}}
+\def\R{\mathbb{R}}
+\def\id{I}
+\newcommand{\norm}[1]{  \Vert #1 \Vert }
 
-\#{This is a long-form Jinja comment}
-\begin{itemize}
-\BLOCK{ for x in range(0,100) }
-  \item Counting: \VAR{liste[x]}
+\begin{questions}
+\question
+\begin{parts}
+  \part Pour chacune des matrices suivantes, déterminer ses valeurs propres
+  \part Donner une base de chaque espace propre
+  \part La matrice est-elle diagonalisable ? Si oui, écrire la matrice sous la forme $PDP^{-1}$ avec $D$ matrice diagonale. Si non, sous quelle forme peut-on quand même mettre la matrice ?
+\end{parts}
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+  \#{This is a long-form Jinja comment}
+  &
+\BLOCK{ for x in range(1,100) }
+\text{\hyperlink{mat_\VAR{x}}{\VAR{x})}}
+  \VAR{list_matrix[x]}
+  \BLOCK{ if x is divisibleby(3) } \\ &\BLOCK{ else } && \BLOCK{ endif }  \BLOCK{ endfor }
+\end{align*}
+\endgroup
+\end{questions}
+
+\BLOCK{ for x in range(1,100) }
+\par
+\hypertarget{mat_\VAR{x}}{\VAR{x})}
+\VAR{list_sol[x]}  
 \BLOCK{ endfor }
-\end{itemize}
-
 
 \end{document}
+
