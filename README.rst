@@ -38,10 +38,10 @@ Exemples
 Un exercice généré aléatoirement :
 
 .. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
-   :width: 400 px
+
 Correction générée aléatoirement :
 
 .. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png
-   :width: 400 px
+   :scale: 150%
 
 
