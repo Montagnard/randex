@@ -1,7 +1,7 @@
 
 
 
-RandEx |Installation| |Documentation| |Contributions| |Exemples| |Copyright and License| 
+RandEx |Installation| |Documentation| |Contributions| |Exemples|
 =============================================================
 
 Un générateur automatique d'exercices sur la diagonalisation ou sur la mise sous forme de Jordan de matrices explicites.
@@ -12,7 +12,7 @@ Tout est dans le script python main.py.
 
 Documentation
 -------------
- Ce programme a été crée dans le cadre d'une session de travaux dirigé pour des étudiants en informatique el 3eme anné de licence. Ce script crée aléatoirement des exercices ou il faut etudier la diagonlisabilité d'une matrice. Les matrices crées sont a coefficients entiers. Elles possèdent de plus des valeurs propres réelles et entieres. Celà permet des calculs sans barre de fraction pour les étudiants et evite les dénonimateurs pénibles.
+Ce programme a été crée dans le cadre d'une session de travaux dirigé pour des étudiants en informatique el 3eme anné de licence. Ce script crée aléatoirement des exercices ou il faut etudier la diagonlisabilité d'une matrice. Les matrices crées sont a coefficients entiers. Elles possèdent de plus des valeurs propres réelles et entieres. Celà permet des calculs sans barre de fraction pour les étudiants et evite les dénonimateurs pénibles.
 
 Contributions
 ------------
@@ -26,11 +26,11 @@ Des développements futurs sont envisagés. Entre autres:
 
 - Exercices plus variés :
 
-  - [ ] Montrer que x est un vecteur propre
-  - [ ] Calculer le polynôme caractéristique
-  - [ ] Calculer rg(M) (rg(M-a id)) en déduire l'ensemble des valeurs propres
-  - [ ] Calculer tr(M), en déduire l'ensemble des valeurs propres de M
-  - [ ] Calculer les projecteurs spectraux
+  - [] Montrer que x est un vecteur propre
+  - [] Calculer le polynôme caractéristique
+  - [] Calculer rg(M) (rg(M-a id)) en déduire l'ensemble des valeurs propres
+  - [] Calculer tr(M), en déduire l'ensemble des valeurs propres de M
+  - [] Calculer les projecteurs spectraux
 
 Exemples
 --------
@@ -38,9 +38,10 @@ Exemples
 
 .. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
    :width: 400 px   	    
-   :alt: test1
+   :title: exercice
 
-Copyright and License
----------------------
+.. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png
+   :width: 400 px   	    
+   :title: correction
 
-ToDo
+
