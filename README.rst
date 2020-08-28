@@ -44,4 +44,7 @@ Correction générée aléatoirement :
 .. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png
    :scale: 150%
 
+![test image size](master/screenshot_001.png){:height="700px" width="400px"}
+
+![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png){:height="150%" width="150%"}
 
