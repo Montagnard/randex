@@ -37,5 +37,6 @@ Exemples
 
 
 .. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
-   :width: 400 px   	    
+   :width: 400 px
+   :title: "exercice"   	    
 
