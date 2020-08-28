@@ -40,8 +40,5 @@ Exemples
    :width: 400 px   	    
    :title: exercice
 
-.. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png
-   :width: 400 px   	    
-   :title: correction
 
 
