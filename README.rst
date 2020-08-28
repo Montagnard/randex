@@ -34,16 +34,11 @@ Des développements futurs sont envisagés. Entre autres:
 
 Exemples
 --------
-<p align="center">
-  <img src="master/screenshot_001.png" width="350" title="hover text">
-  <img src="https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png" width="350" alt="accessibility text">
-</p>
 
 
-.. figure:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
-
-	    
-   :alt: test
+.. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
+   :width: 400 px   	    
+   :alt: test1
 
 Copyright and License
 ---------------------
