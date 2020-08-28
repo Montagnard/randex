@@ -14,6 +14,17 @@ Documentation
 -------------
 Ce programme a été crée dans le cadre d'une session de travaux dirigé pour des étudiants en informatique el 3eme anné de licence. Ce script crée aléatoirement des exercices ou il faut etudier la diagonlisabilité d'une matrice. Les matrices crées sont a coefficients entiers. Elles possèdent de plus des valeurs propres réelles et entieres. Celà permet des calculs sans barre de fraction pour les étudiants et evite les dénonimateurs pénibles.
 
+Exemples
+--------
+
+Un exercice généré aléatoirement :
+
+![test image size](master/screenshot_001.png)
+
+Correction générée aléatoirement :
+
+![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png)
+
 Contributions
 ------------
 
@@ -26,25 +37,9 @@ Des développements futurs sont envisagés. Entre autres:
 
 - Exercices plus variés :
 
-  - [] Montrer que x est un vecteur propre
-  - [] Calculer le polynôme caractéristique
-  - [] Calculer rg(M) (rg(M-a id)) en déduire l'ensemble des valeurs propres
-  - [] Calculer tr(M), en déduire l'ensemble des valeurs propres de M
-  - [] Calculer les projecteurs spectraux
-
-Exemples
---------
-
-Un exercice généré aléatoirement :
-
-.. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png
-
-Correction générée aléatoirement :
-
-.. image:: https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png
-   :scale: 150%
-
-![test image size](master/screenshot_001.png){:height="700px" width="400px"}
-
-![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png)
+  - [ ] Montrer que x est un vecteur propre
+  - [ ] Calculer le polynôme caractéristique
+  - [ ] Calculer rg(M) (rg(M-a id)) en déduire l'ensemble des valeurs propres
+  - [ ] Calculer tr(M), en déduire l'ensemble des valeurs propres de M
+  - [ ] Calculer les projecteurs spectraux
 
