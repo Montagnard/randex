@@ -19,11 +19,12 @@ Exemples
 
 Un exercice généré aléatoirement :
 
-![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_001.png)
+![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png){:height="160%" width="160%"}
 
 Correction générée aléatoirement :
 
-![test image size](https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png){:height="160%" width="160%"}
+<img src="https://raw.githubusercontent.com/Montagnard/randex/master/screenshot_002.png" width="600">
+
 
 Contributions
 ------------
