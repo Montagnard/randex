@@ -3,59 +3,19 @@ import numpy.random as rand
 import numpy
 import simpy
 import math
-from pylatex import Document, Section, Subsection, Tabular, Math, TikZ, Axis, Plot, Figure, Matrix, NoEscape, Command
-from pylatex.utils import italic
+from pylatex import Matrix
 import os
 from latex import build_pdf
 from jinja2 import Template, Environment, FileSystemLoader
-latex_jinja_env = Environment(
-    block_start_string = '\BLOCK{',
-    block_end_string = '}',
-    variable_start_string = '\VAR{',
-    variable_end_string = '}',
-    comment_start_string = '\#{',
-    comment_end_string = '}',
-    line_statement_prefix = '%%',
-    line_comment_prefix = '%#',
-    trim_blocks = True,
-    autoescape = False,
-    loader = FileSystemLoader(os.path.abspath('.'))
-)
-
-print(os.path.abspath('.'))
-template = latex_jinja_env.get_template('jinja-test.tex')
-
 
 Trigo = [1]*3 + [2]* 2 + [3]*1
 Diago = [1]
 
 # Parametres :
 shape = Trigo
+# Dimension de la matrice (pour l'instant 3)
 n = 3
-m=200
-
-def rand_cas32(n):
-    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    return [[d,1],[d,2]]
-def rand_cas33(n):
-    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    return [[d,3]]
-def rand_cas31(n):
-    d = rand.choice([1]*5 + [2]*5 + [3]*4 + [4]*3 + [5]*3 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    return [[d,1],[d,1], [d,1]]
-def rand_cas21(n):
-    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    d2 = rand.choice(range(d1+1,10))
-    return [[d1,1],[d1,1],[d2,1]]
-def rand_cas22(n):
-    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    d2 = rand.choice(range(d1+1,10))
-    return [[d1,2],[d2,1]]
-def rand_cas1(n):
-    d1 = rand.choice([1]*5 + [2]*5 + [3]*4 + [0]*7 + [-1]*6 + [-2]*6 + [-3]*2)
-    d2 = rand.choice(range(d1+1,10))
-    d3 = rand.choice(range(d2+1, 12))
-    return [[d1,1],[d2,1],[d3,1]]
+n_exo = 10
 
 def rand_conf_diag(n):
     r = 0
@@ -111,22 +71,6 @@ def latex_matrix (M):
     s = Matrix(M).dumps_content()
     return "\\begin{pmatrix} " + s + "\\end{pmatrix}"
 
-def roots_to_latex_poly(D) :
-    s = "-"
-    for d,k in D.items() :
-        root = d
-        if root == 0:
-            mon = "\\lambda"
-        elif root > 0 :
-            mon = "(\\lambda -" + str(root) + ")"
-        else :
-            mon = "(\\lambda +" + str(-root) + ")"
-        if k == 1:
-            exp = ""
-        else:
-            exp="^"+str(k)
-        s = s + mon + exp
-    return s
 
 def pol_to_string (pol, X) :
     def mon (i):
@@ -143,106 +87,112 @@ def pol_to_string (pol, X) :
         if coef == 0:
             s = s
         elif coef == 1 :
-            s = s + "+" + mon(deg - i)
+            s = s + "+" + mon(deg - i - 1)
         elif coef == -1 :
-            s = s + "-" + mon(deg - i)
+            s = s + "-" + mon(deg - i - 1)
         elif coef > 1 :
-            s = s + "+" + str(coef) + mon(deg - i)
+            s = s + "+" + str(coef) + mon(deg - i - 1)
         else :
-            s = s + str(coef) + mon(deg - i)
+            s = s + str(coef) + mon(deg - i - 1)
     return s
+
+def add_latex(n):
+    return ("+ " + str(n)).replace("+ -", "- ")
 
 class Jordan_form :
 
     def __init__(self, n) :
-        self.block = rand_conf_diag(n)
-        blockk = {}
-        for (d,k) in self.block:
+        self.dim = n
+        self.jordan_blocks= rand_conf_diag(n)
+        self.mult_geo = {}
+        for (d,k) in self.jordan_blocks:
             try :
-                blockk[d] +=1
+                self.mult_geo[d] +=1
             except :
-                blockk[d] = 1
-        blockkk = {}
-        for (d,k) in self.block:
+                self.mult_geo[d] = 1
+        self.mult_alg = {}
+        for (d,k) in self.jordan_blocks:
             try :
-                blockkk[d] +=k
+                self.mult_alg[d] +=k
             except :
-                blockkk[d] = k
-        self.blockk = blockk
-        self.blockkk = blockkk
-        self.jordan = diag_from_conf(self.block, n)
-        l = []
-        for x in range(n):
-            l.append(self.jordan[x,x])
-        self.spectra = l
+                self.mult_alg[d] = k
+        self.jordan = diag_from_conf(self.jordan_blocks, n)
+        self.spectra = [ self.jordan[x,x] for x in range(n)]
         self.passage = rand_glZ(n)
         self.inverse = inverse_integer_matrix(self.passage)
         self.matrix = numpy.dot(self.passage, numpy.dot(self.jordan, self.inverse))
         self.poly = numpy.poly(self.jordan)
+        self.is_diago = (self.mult_geo == self.mult_alg)
 
-    def latex_matrix(self) :
-        s = latex_matrix(self.matrix)
+    def poly_factored_latex(self, x) :
+        s = "-"
+        for d,k in self.mult_alg.items() :
+            root = d
+            if root == 0:
+                mon = x
+            elif root > 0 :
+                mon = "(" + x + " -" + str(root) + ")"
+            else :
+                mon = "(" + x + " +" + str(-root) + ")"
+            if k == 1:
+                exp = ""
+            else:
+                exp="^"+str(k)
+            s = s + mon + exp
         return s
 
-    def latex_reduced_form(self) :
-        sp = latex_matrix(self.passage)
-        sj = latex_matrix(self.jordan)
-        spi = latex_matrix(self.inverse)
-        s = sp + " \cdot " + sj + " \cdot " + spi
-        return s
-
-    def cas(self):
-        i = len(self.blockk)
-        j = len(self.block)
-        if i == 3:
-            return "la matrice a trois valeurs propres distinctes et est diagonalisable"
-        elif i == 2:
-            if j ==3:
-                return "la matrice a deux valeurs propres et est diagonalisable"
-            else :
-                return "la matrice a deux valeurs propre et n'est pas diagonalisable"
-        else :
-            if j ==3:
-                return "la matrice a une seule valeur propre et est diagonalisable"
-            if j ==2:
-                return "la matrice a une seule valeur propre et n'est pas diagonalisable"
-            else :
-                return "la matrice a une seule valeur propre et n'est pas diagonalisable"
-    def latex_poly(self) :
+    def latex_poly(self, x) :
         pol = -(numpy.poly(self.spectra))
-        s = pol_to_string(pol, "\\lambda")
+        s = pol_to_string(pol, x)
         return s
 
+    def shifted_matrix(self, x):
+        N = self.matrix-x*numpy.identity(self.dim).astype(int)
+        return N
 
+    def basis_eigenspace(self, root):
+        l = []
+        i = 0
+        for (d,k) in self.jordan_blocks:
+            if d == root :
+                vect = self.passage.T[i]
+                s = "\\\\".join([ str(x) for x in vect])
+                l.append(s)
+            i += k
+        return l
 
 
 list_matrix = []
 list_sol = []
 list_poly = []
-for x in range(0,m) :
+for x in range(0,n_exo) :
     M = Jordan_form(n)
-    list_matrix.append(M.latex_matrix())
-    pol_string = pol_to_string(-(M.poly), "\\lambda")+ "=" + roots_to_latex_poly(M.blockkk)
-    s = "Le polynome caracteristique de la matrice est donne par $$" + pol_string + "$$"
-    for (d, k) in M.blockk.items() :
-        N = M.matrix-d*numpy.identity(n).astype(int)
-        s = s + "$$M - " + str(d) + "Id =" + latex_matrix(N)
-        s = s +"$$ Et on a $"
-        s = s + "dim(E_{"+ str(d)+"}) =" + str(k) + "$."
-    s = s.replace("- -", "+")
-    s = s + "\\ On est donc dans le cas où " + M.cas() +  ". On peut ecrire par exemple la matrice sous la forme :"
-    s = s + "$$"+ M.latex_reduced_form() + "$$"
-    list_sol.append(s)
+    list_matrix.append(M)
 
+latex_jinja_env = Environment(
+    block_start_string = '\BLOCK{',
+    block_end_string = '}',
+    variable_start_string = '\VAR{',
+    variable_end_string = '}',
+    comment_start_string = '\#{',
+    comment_end_string = '}',
+    line_statement_prefix = '%%',
+    line_comment_prefix = '%#',
+    trim_blocks = True,
+    autoescape = False,
+    loader = FileSystemLoader(os.path.abspath('.'))
+)
+
+template = latex_jinja_env.get_template('jinja-test.tex')
 
 D = {}
 D["list_matrix"] = list_matrix
-D["list_sol"] = list_sol
-D["list_poly"] = list_poly
+D["n_exo"] = n_exo
+D["latex_matrix"] = latex_matrix
 tex = template.render(D)
 f= open("result.tex","w+")
 f.write(tex)
-f.close() 
+f.close()
 pdf = build_pdf(tex)
 pdf.save_to('ex1.pdf')
 
